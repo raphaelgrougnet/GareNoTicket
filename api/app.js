@@ -5,6 +5,7 @@ var hateoasLinker = require('express-hateoas-links');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const historiqueRoutes = require('./routes/historique');
+const dbRoutes = require('./routes/db');
 const config = require('./config');
 
 const app = express();
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 app.use('/auth', authRoutes);
 app.use(userRoutes);
 app.use(historiqueRoutes);
+app.use(dbRoutes);
 
 
 
