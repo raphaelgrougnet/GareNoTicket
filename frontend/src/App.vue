@@ -1,8 +1,13 @@
 <script setup>
+  import { RouterView } from 'vue-router'
+  import NavBar from './components/Navbar.vue'
 </script>
 
 <template>
-  <p>Hello World !</p>
+  <NavBar />
+  <div class="container mx-auto">
+    <RouterView />
+  </div>
 </template>
 
 <style scoped>
