@@ -40,12 +40,21 @@ export default {
     methods: {
         updateUserStatus() {
             if (localStorage.getItem('token')) {
-                const decoded = jwtDecode(localStorage.getItem('token'));
-                this.isLoggedIn = true;
-                this.isValet = decoded.isValet;
+                try {
+                    const { isValet } = jwtDecode(localStorage.getItem('token'));
+                    this.isLoggedIn = true;
+                    this.isValet = isValet;
+                } catch (error) {
+                    localStorage.removeItem('token');
+                    this.isLoggedIn = false;
+                    this.isValet = false;
+                    this.$router.push({ name: 'login' });
+                }
+                
             } else {
                 this.isLoggedIn = false;
                 this.isValet = false;
+                this.$router.push({ name: 'login' });
             }
         }
     },
