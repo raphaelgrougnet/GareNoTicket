@@ -8,7 +8,7 @@ exports.login = async (req, res, next) => {
   User.findOne({ email })
     .then(user => {
       if (!user) {
-        return res.status(401).json({ message: 'Email ou Mot de passe incorrect!' });
+        return res.status(401).json({ message: 'Email ou mot de passe incorrect!' });
       }
       bcrypt.compare(password, user.password)
         .then(doMatch => {
@@ -20,7 +20,7 @@ exports.login = async (req, res, next) => {
             );
             res.status(200).json({ token: token });
           } else {
-            res.status(401).json({ message: 'Email ou Mot de passe incorrect!' });
+            res.status(401).json({ message: 'Email ou mot de passe incorrect!' });
           }
         })
         .catch(err => {
@@ -36,7 +36,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.signup = async (req, res, next) => {
-  const { email, username, password, confirmPassword } = req.body;
+  const { email, username, password } = req.body;
   User.findOne({ email })
     .then(userDoc => {
       if (userDoc) {
