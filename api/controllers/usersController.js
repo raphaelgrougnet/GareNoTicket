@@ -2,6 +2,8 @@ const User = require('../models/user');
 const Voiture = require('../models/voiture');
 const Histo = require('../models/historique');
 const config = require('../config');
+const jwt = require('jsonwebtoken');
+const SECRET_JWT = process.env.SECRET_JWT;
 const url_base = config.URL + ":" + config.PORT;
 
 
@@ -54,7 +56,43 @@ exports.getUserById = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => { }
 
-exports.updateCar = async (req, res, next) => { }
+exports.updateCar = async (req, res, next) => { 
+  try {
+    const authHeader = req.get('Authorization');
+    if (!authHeader) {
+      const error = new Error('Non authentifié.');
+      error.statusCode = 401;
+      throw error;
+    }
+    const token = authHeader.split(' ')[1];
+    let decodedToken;
+    try {
+      decodedToken = jwt.verify(token, SECRET_JWT);
+    } catch (err) {
+      err.statusCode = 401;
+      throw err;
+    }
+    const userId = decodedToken.userId;
+    const user = await checkUserExists(userId);
+    const updatedCar = req.body;
+    const car = user.voiture;
+    if (!car) {
+      const error = new Error('La voiture n\'existe pas.');
+      error.statusCode = 404;
+      throw error;
+    }
+    Object.keys(updatedCar).forEach(key => {
+      console.log(key);
+      car[key] = updatedCar[key];
+    });
+    await car.save();
+    res.status(200).json({
+      car: car
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 
 
 
