@@ -7,20 +7,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
-      beforeEnter: (to, from, next) => {
-        if (localStorage.getItem('token')) {
-          next();
-        } else {
-          next({ name: 'login' });
-        }
-        next()
-      }
+      component: HomeView
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue')
     },
     {
       path: '/logout',
@@ -30,7 +27,21 @@ const router = createRouter({
         next({ name: 'login' });
       }
     },
-  ]
+  ],
+  
+})
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+
+  if (to.name !== 'login' && token === null) {
+    localStorage.removeItem('token');
+    next({ name: 'login' })
+  } else if (to.name === 'login' && token !== null) {
+    next({ name: 'home' }) 
+  } else {
+    next()
+  }
 })
 
 export default router
