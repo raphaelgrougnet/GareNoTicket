@@ -81,8 +81,35 @@ exports.updateCar = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
+    if (updatedCar['isParked']) {
+      const date = new Date();
+      const day = date.getDay();
+      const hour = date.getHours();
+      const min = date.getMinutes();
+      if ((day >= 1 && day <= 5) && ((hour >= 9 && hour < 12) || (hour >= 13 && min >= 30 && hour < 17))) {
+        car['timeToLeave'] = date.setMinutes(date.getMinutes() + 60);
+        if (car['timeToLeave'].hour >= 12 && car['timeToLeave'].hour < 13.5) {
+          date.setHours(14);
+          date.setMinutes(30);
+          car['timeToLeave'] = date;
+        }
+        else if (car['timeToLeave'].hour >= 17) {
+          date.setdate(date.getDate() + 1);
+          date.setHours(9);
+          date.setMinutes(0);
+          car['timeToLeave'] = date;
+        }
+      }
+      else{
+        const nextMonday = date.getDate() + (1 + 7 - date.getDay()) % 7;
+        date.setDate(nextMonday);
+        date.setHours(10);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        car['timeToLeave'] = date;
+      }
+    }
     Object.keys(updatedCar).forEach(key => {
-      console.log(key);
       car[key] = updatedCar[key];
     });
     await car.save();
