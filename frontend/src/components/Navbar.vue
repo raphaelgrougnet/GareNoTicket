@@ -6,18 +6,18 @@
             <router-link :to="{ name : 'home' }" class="text-black text-xl font-bold ">GareNoTicket</router-link>
         </div>
         <div v-if="this.isLoggedIn && !this.isValet">
-            <router-link to="/test" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Ma place</router-link>
-            <router-link to="/" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Profil</router-link>
-            <router-link to="/" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Transaction</router-link>
-            <router-link :to="{ name : 'logout' }" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Déconnexion</router-link>
+            <router-link :to="{ name : 'home' }" exact-active-class="active" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Ma place</router-link>
+            <router-link to="/profil" exact-active-class="active" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Profil</router-link>
+            <router-link to="/transaction" exact-active-class="active" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Transaction</router-link>
+            <router-link :to="{ name : 'logout' }" exact-active-class="active" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Déconnexion</router-link>
         </div>
         <div v-else-if="this.isLoggedIn && this.isValet">
-            <router-link to="/test" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Valet</router-link>
-            <router-link to="/" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Profil</router-link>
-            <router-link :to="{ name : 'logout' }" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Déconnexion</router-link>
+            <router-link to="/valet" exact-active-class="active" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Valet</router-link>
+            <router-link to="/profil" exact-active-class="active" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Profil</router-link>
+            <router-link :to="{ name : 'logout' }" exact-active-class="active" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Déconnexion</router-link>
         </div>
         <div v-else>
-            <router-link :to="{ name : 'login' }" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Connexion</router-link>
+            <router-link :to="{ name : 'login' }" exact-active-class="active" class="text-black text-xl font-bold rounded px-3 py-2 hover:bg-slate-200 hover:shadow">Connexion</router-link>
         </div>
     </div>
   </nav>
@@ -44,6 +44,7 @@ export default {
                     const { isValet } = jwtDecode(localStorage.getItem('token'));
                     this.isLoggedIn = true;
                     this.isValet = isValet;
+                    
                 } catch (error) {
                     localStorage.removeItem('token');
                     this.isLoggedIn = false;
@@ -54,7 +55,6 @@ export default {
             } else {
                 this.isLoggedIn = false;
                 this.isValet = false;
-                this.$router.push({ name: 'login' });
             }
         }
     },

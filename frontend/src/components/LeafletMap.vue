@@ -19,7 +19,7 @@ export default {
     isParked: {
       type: Boolean,
     },
-    isDropped: {
+    isDropping: {
       type: Boolean,
     },
     latitude: {
@@ -30,6 +30,10 @@ export default {
       type: Number,
       default: 0,
     },
+    wantLocation: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
@@ -98,8 +102,11 @@ export default {
     //     this.findUserLocation();
     //   }
     // },
-    isDropped() {
-      let markerPosition;
+    isDropping() {
+      console.log("isDropping");
+      if (this.isDropping) {
+        console.log("isDropping True");
+        let markerPosition;
         this.map.eachLayer((layer) => {
           if (layer instanceof L.Marker) {
             markerPosition = layer.getLatLng();
@@ -113,39 +120,59 @@ export default {
         L.marker([markerPosition.lat, markerPosition.lng], { draggable: false, title: "currentPosition" }).addTo(this.map);
         this.map.setView([markerPosition.lat, markerPosition.lng], 13);
         this.$emit('coord', { lat: markerPosition.lat, lng: markerPosition.lng });
+      }
+      else{
+        console.log("isDropping False");
+        this.map.eachLayer((layer) => {
+          if (layer instanceof L.Marker) {
+            this.map.removeLayer(layer);
+          }
+        });
+        this.findUserLocation();
+      }
+
     },
     isMoving() {
       console.log("IsMoving");
       this.map.eachLayer((layer) => {
-          if (layer instanceof L.Marker) {
-            this.map.removeLayer(layer);
-          }
-        });
+        if (layer instanceof L.Marker) {
+          this.map.removeLayer(layer);
+        }
+      });
       if (!this.isMoving) {
         this.findUserLocation();
       }
     },
-    isParked(){
+    isParked() {
       console.log("IsParked");
-      if (this.isParked){
-        this.map.eachLayer((layer) => {
-          if (layer instanceof L.Marker) {
-            this.map.removeLayer(layer);
-          }
-        });
+      this.map.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          this.map.removeLayer(layer);
+        }
+      });
+      if (this.isParked) {
         L.marker([this.latitude, this.longitude], { draggable: false, title: "currentPosition" }).addTo(this.map);
         this.map.setView([this.latitude, this.longitude], 13);
       }
-      else{
-        this.map.eachLayer((layer) => {
-          if (layer instanceof L.Marker) {
-            this.map.removeLayer(layer);
-          }
-        });
+      else {
         this.findUserLocation();
       }
+    },
+    wantLocation() {
+      console.log("wantLocation");
+      if (this.wantLocation) {
+        let markerPosition;
+        this.map.eachLayer((layer) => {
+          if (layer instanceof L.Marker) {
+            markerPosition = layer.getLatLng();
+          }
+        });
+        this.map.setView([markerPosition.lat, markerPosition.lng], 16);
+        this.$emit('wantedLocation');
+      }
+      
     }
-    
+
   }
 }
 </script>

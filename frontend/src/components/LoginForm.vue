@@ -66,7 +66,7 @@ export default {
               return;
             }
             localStorage.setItem('token', json.token)
-            this.$router.push('/')
+            this.$router.push({ name : 'home'})
           } catch (error) {
             console.error(error);
           }

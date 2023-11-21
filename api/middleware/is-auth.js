@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, SECRET_JWT);
-    console.log(decodedToken);
   } catch (err) {
     err.statusCode = 401;
     throw err;

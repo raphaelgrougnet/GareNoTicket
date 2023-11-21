@@ -1,21 +1,40 @@
 <template>
     <div class="flex flex-col shadow-2xl rounded-2xl align-center">
         <div class="flex-grow">
-            <LeafletMap :latitude="this.latitude" :longitude="this.longitude" :isDropped="this.isDropped" :is-moving="this.isMoving" :isParked="this.isParked" @coord="saveCoord"/>
+            <LeafletMap :latitude="this.latitude"
+            :longitude="this.longitude"
+            :isDropping="this.isDropping"
+            :is-moving="this.isMoving"
+            :isParked="this.isParked"
+            :wantLocation="this.wantLocation"
+            @coord="saveCoord"
+            @wantedLocation="wantLoc"/>
         </div>
-        <div class="flex" v-if="isMoving">
+        <div class="flex px-5 py-2" v-if="isMoving">
             <button class="bg-slate-300 text-neutral-400 rounded px-5 py-2 m-3 flex-grow" disabled>Je laisse ma voiture</button>
             <button class="bg-slate-300 text-neutral-400 rounded px-5 py-2 m-3 flex-grow" disabled>J'ai récupéré ma voiture</button>
         </div>
-        <div class="flex" v-else-if="isParked">
-            <button class="bg-slate-300 text-neutral-400 rounded px-5 py-2 m-3 flex-grow" disabled>Je laisse ma
+        <div class="flex px-5 py-2" v-else-if="isParked || isDropping">
+            <button class="bg-slate-300 text-neutral-400 rounded px-5 py-2 flex-grow" disabled>Je laisse ma
                 voiture</button>
-            <button class="shadow rounded px-5 py-2 m-3 hover:bg-slate-200 flex-grow" @click="pickUpCar">J'ai récupéré ma
+            <button class="shadow rounded px-5 py-2 mx-2 hover:bg-slate-200 flex-grow" @click="pickUpCar">J'ai récupéré ma
                 voiture</button>
+            <button class="shadow px-2 py-2 rounded-full hover:bg-slate-200" @click="wantLoc">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+            </button>
         </div>
-        <div class="flex" v-else>
-            <button class="shadow rounded px-5 py-2 m-3 hover:bg-slate-200 flex-grow" @click="askDrop">{{ dropTextButton }}</button>
-            <button class="bg-slate-300 text-neutral-400 rounded px-5 py-2 m-3 flex-grow" disabled>J'ai récupéré ma voiture</button>
+        <div class="flex px-5 py-2" v-else>
+            <button class="shadow rounded px-5 py-2  hover:bg-slate-200 flex-grow" @click="askDrop">{{ dropTextButton }}</button>
+            <button class="bg-slate-300 text-neutral-400 rounded px-5 py-2 mx-2 flex-grow" disabled>J'ai récupéré ma voiture</button>
+            <button class="shadow px-2 py-2 rounded-full hover:bg-slate-200" @click="wantLoc">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+            </button>
         </div>
         <div class="flex align-middle justify-center flex-col" v-if="wantDrop">
             <p class="text-center">Veuillez vérifier que votre voiture est bien stationnée à l'endroid indiqué sur la carte,
@@ -23,7 +42,7 @@
             <button class="shadow rounded px-5 py-2 m-3 hover:bg-slate-200" @click="dropCar">Je confirme</button>
         </div>
         <div v-if="isMoving">
-            <p class="text-center p-5 text-red-500" >Votre voiture est en cours de déplacement. Veuillez patienter jusqu'à ce que votre valet ait terminé de la déplacer, puis rafraîchissez la carte.</p>
+            <p class="text-center px-2 pb-2 text-red-500" >Votre voiture est en cours de déplacement. Veuillez patienter jusqu'à ce que votre valet ait terminé de la déplacer, puis rafraîchissez la carte.</p>
         </div>
         
     </div>
@@ -39,7 +58,8 @@ export default {
             isMoving: false,
             isParked: false,
             wantDrop: false,
-            isDropped: false,
+            isDropping: false,
+            wantLocation: false,
             dropTextButton: "Je laisse ma voiture",
             latitude: 0,
             longitude: 0,
@@ -124,7 +144,7 @@ export default {
         
         },
         dropCar() {
-            this.isDropped = true;
+            this.isDropping = true;
             this.wantDrop = !this.wantDrop;
 
         },
@@ -132,15 +152,26 @@ export default {
             this.wantDrop = !this.wantDrop;
         },
         pickUpCar() {
-            this.isParked = false;
-            this.isMoving = false;
-            this.sendPostion(0, 0, false, false);
+            this.getUser().then((promise) => {
+                if (promise.user.voiture.isMoving) {
+                    location.reload();
+                }
+                else{
+                    this.isParked = false;
+                    this.isMoving = false;
+                    this.isDropping = false;
+                    this.sendPostion(0, 0, false, false);
+                }
+            });
         },
         saveCoord(coord) {
             this.latitude = coord.lat;
             this.longitude = coord.lng;
-            console.log(this.latitude, this.longitude);
             this.sendPostion(this.latitude, this.longitude, true, false);
+        },
+        wantLoc() {
+            this.wantLocation = !this.wantLocation;
+
         }
 
     },

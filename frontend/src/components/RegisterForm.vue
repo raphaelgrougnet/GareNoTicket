@@ -129,7 +129,7 @@ export default {
                             this.errorMessage = json.message;
                             return;
                         }
-                        this.$router.push('/login')
+                        this.$router.push({ name : 'login'})
                     } catch (error) {
                         console.error(error);
                     }
