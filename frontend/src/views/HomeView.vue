@@ -51,6 +51,8 @@
 <script>
 import LeafletMap from '../components/LeafletMap.vue'
 import { jwtDecode } from 'jwt-decode';
+import { useToast } from "vue-toastification";
+const toast = useToast();
 export default {
     name: 'HomeView',
     data() {
@@ -82,6 +84,7 @@ export default {
                 if (!userId) {
                     localStorage.removeItem('token');
                     this.$router.push({ name: 'login' });
+                    toast.error("Veuillez vous connecter pour faire une action avec votre voiture.");
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
                 const response = await fetch(`http://localhost:3000/car/${userId}`, {
@@ -96,10 +99,22 @@ export default {
                     if (response.status === 401) {
                         localStorage.removeItem('token');
                         this.$router.push({ name: 'login' });
+                        toast.error("Non authentifié. Redirection vers la connexion.")
                         throw new Error('Non authentifié. Redirection vers la connexion.');
                     } else {
+                        toast.error("Erreur lors de l'envoi de la position.");
                         throw new Error('Erreur lors de l\'envoi de la position');
+                        
                     }
+                }
+                else{
+                    if (!pIsParked && !pIsMoving){
+                        toast.success("Votre voiture a été récupérée avec succès.");
+                    }
+                    else{
+                        toast.success("Votre voiture a été déposée avec succès.");
+                    }
+                    
                 }
             } catch (error) {
                 console.error(error);

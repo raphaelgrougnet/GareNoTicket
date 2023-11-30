@@ -2,6 +2,7 @@ const User = require('../models/user');
 const Voiture = require('../models/voiture');
 const Historique = require('../models/historique');
 const Facture = require('../models/facture');
+const bcrypt = require('bcryptjs');
 
 
 const users = [
@@ -9,7 +10,7 @@ const users = [
     "_id": "655385535f376fe7e3043276",
     "email": "user1@gare.ca",
     "username": "Raphaël Grougnet",
-    "password": "123456",
+    "password": bcrypt.hashSync("123456", 8),
     "isValet": false,
     "voiture": "655380d25f376fe7e3043248"
   },
@@ -17,7 +18,7 @@ const users = [
     "_id": "6553856d5f376fe7e3043278",
     "email": "user2@gare.ca",
     "username": "Jean Michel",
-    "password": "123456",
+    "password": bcrypt.hashSync("123456", 8),
     "isValet": false,
     "voiture": "655385dd5f376fe7e304327d"
   },
@@ -25,7 +26,7 @@ const users = [
     "_id": "655387855f376fe7e304329c",
     "email": "user3@gare.ca",
     "username": "Alice Dupont",
-    "password": "123456",
+    "password": bcrypt.hashSync("123456", 8),
     "isValet": false,
     "voiture": "655387e75f376fe7e30432a0"
   },
@@ -33,7 +34,7 @@ const users = [
     "_id": "6553878a5f376fe7e304329d",
     "email": "user4@gare.ca",
     "username": "Bob Martin",
-    "password": "123456",
+    "password": bcrypt.hashSync("123456", 8),
     "isValet": false,
     "voiture": "6553880a5f376fe7e30432a1"
   },
@@ -41,7 +42,7 @@ const users = [
     "_id": "655387935f376fe7e304329e",
     "email": "user5@gare.ca",
     "username": "Eva Rousseau",
-    "password": "123456",
+    "password": bcrypt.hashSync("123456", 8),
     "isValet": false,
     "voiture": "6553882b5f376fe7e30432a2"
   },
@@ -49,7 +50,7 @@ const users = [
     "_id": "655389535f376fe7e30432af",
     "email": "valet@gare.ca",
     "username": "Alfred Pennyworth",
-    "password": "123456",
+    "password": bcrypt.hashSync("123456", 8),
     "isValet": true,
     "price": 2.5
   }

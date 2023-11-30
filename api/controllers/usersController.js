@@ -44,7 +44,6 @@ exports.getUser = async (req, res, next) => {
 exports.getUserById = async (req, res, next) => {
   try {
     const userId = req.params.id;
-    console.log(userId);
     const user = await checkUserExists(userId);
     res.status(200).json({
       user: user
@@ -54,25 +53,51 @@ exports.getUserById = async (req, res, next) => {
   }
 };
 
-exports.updateUser = async (req, res, next) => { }
-
-exports.updateCar = async (req, res, next) => { 
+exports.updateUser = async (req, res, next) => {
   try {
-    const authHeader = req.get('Authorization');
-    if (!authHeader) {
-      const error = new Error('Non authentifié.');
-      error.statusCode = 401;
+    const userId = req.user.userId;
+    const user = await checkUserExists(userId);
+    const updatedUser = req.body.user;
+    if (!user) {
+      const error = new Error('L\'utilisateur n\'existe pas.');
+      error.statusCode = 404;
       throw error;
     }
-    const token = authHeader.split(' ')[1];
-    let decodedToken;
-    try {
-      decodedToken = jwt.verify(token, SECRET_JWT);
-    } catch (err) {
-      err.statusCode = 401;
-      throw err;
+    user.username = updatedUser.username || user.username;
+    user.email = updatedUser.email || user.email;
+    if (!user.voiture && updatedUser.voiture){
+      const voiture = new Voiture({
+        marque: updatedUser.voiture.marque || "",
+        modele: updatedUser.voiture.modele || "",
+        couleur: updatedUser.voiture.couleur || "",
+        plaque: updatedUser.voiture.plaque || "",
+        valet : "655380365f376fe7e3043243",
+        latitude: 0,
+        longitude: 0,
+        isParked: false,
+        isMoving: false,
+      });
+      await voiture.save();
+      user.voiture = voiture._id;
     }
-    const userId = decodedToken.userId;
+    else if (user.voiture && updatedUser.voiture) {
+      const voiture = await Voiture.findById(user.voiture);
+      voiture.marque = updatedUser.voiture.marque || voiture.marque;
+      voiture.modele = updatedUser.voiture.modele || voiture.modele;
+      voiture.couleur = updatedUser.voiture.couleur || voiture.couleur;
+      voiture.plaque = updatedUser.voiture.plaque || voiture.plaque;
+      await voiture.save();
+    }
+    await user.save();
+    res.status(200).json({ message: 'Utilisateur mis à jour.' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+exports.updateCar = async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
     const user = await checkUserExists(userId);
     const updatedCar = req.body;
     const car = user.voiture;
@@ -100,7 +125,7 @@ exports.updateCar = async (req, res, next) => {
           car['timeToLeave'] = date;
         }
       }
-      else{
+      else {
         const nextMonday = date.getDate() + (1 + 7 - date.getDay()) % 7;
         date.setDate(nextMonday);
         date.setHours(10);
@@ -127,10 +152,10 @@ exports.deleteUser = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const user = await checkUserExists(userId);
-    await user.remove();
+    await user.deleteOne();
     if (user.voiture) {
       const voiture = await Voiture.findById(user.voiture);
-      await voiture.remove();
+      await voiture.deleteOne();
     }
     res.status(204).send();
   } catch (err) {

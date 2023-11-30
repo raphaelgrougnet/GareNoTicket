@@ -31,11 +31,17 @@ exports.effectuerPaiement = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    
+    let total = 0;
     for (let historique of histo) {
       historique.isPaid = true;
+      total += historique.price;
       await historique.save();
     }
+    const newFacture = new Facture({
+      userId: userId,
+      price: total
+    });
+    await newFacture.save();
     
     res.status(200).json({
       message: 'Tous les historiques ont été payés.'

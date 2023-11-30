@@ -3,6 +3,7 @@
 </template>
   
 <script>
+
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -80,32 +81,9 @@ export default {
   },
 
   watch: {
-    // draggableMarker() {
-    //   var markerPosition;
-    //   this.map.eachLayer((layer) => {
-    //     if (layer instanceof L.Marker) {
-    //       markerPosition = layer.getLatLng();
-    //     }
-    //   });
-    //   this.map.eachLayer((layer) => {
-    //     if (layer instanceof L.Marker) {
-    //       this.map.removeLayer(layer);
-    //     }
-    //   });
-    //   if (!this.draggableMarker) {
-    //     L.marker([markerPosition.lat, markerPosition.lng], { draggable: false, title : "currentPosition" }).addTo(this.map);
-    //     this.map.setView([markerPosition.lat, markerPosition.lng], 13);
-    //     console.log(markerPosition.lat, markerPosition.lng);
-    //     this.$emit('coord', { lat: markerPosition.lat, lng: markerPosition.lng });
-    //   }
-    //   else {
-    //     this.findUserLocation();
-    //   }
-    // },
     isDropping() {
       console.log("isDropping");
       if (this.isDropping) {
-        console.log("isDropping True");
         let markerPosition;
         this.map.eachLayer((layer) => {
           if (layer instanceof L.Marker) {
@@ -120,9 +98,9 @@ export default {
         L.marker([markerPosition.lat, markerPosition.lng], { draggable: false, title: "currentPosition" }).addTo(this.map);
         this.map.setView([markerPosition.lat, markerPosition.lng], 13);
         this.$emit('coord', { lat: markerPosition.lat, lng: markerPosition.lng });
+        
       }
       else{
-        console.log("isDropping False");
         this.map.eachLayer((layer) => {
           if (layer instanceof L.Marker) {
             this.map.removeLayer(layer);
@@ -133,7 +111,6 @@ export default {
 
     },
     isMoving() {
-      console.log("IsMoving");
       this.map.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
           this.map.removeLayer(layer);
@@ -144,7 +121,6 @@ export default {
       }
     },
     isParked() {
-      console.log("IsParked");
       this.map.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
           this.map.removeLayer(layer);
@@ -159,7 +135,6 @@ export default {
       }
     },
     wantLocation() {
-      console.log("wantLocation");
       if (this.wantLocation) {
         let markerPosition;
         this.map.eachLayer((layer) => {

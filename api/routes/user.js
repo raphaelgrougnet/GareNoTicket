@@ -13,13 +13,13 @@ router.get('/user/', is_Auth, usersController.getUser);
 router.get('/user/:id', usersController.getUserById);
 
 // Mise à jour d'un utilisateur
-router.put('/user/:userId', usersController.updateUser);
+router.put('/user/:userId', is_Auth, usersController.updateUser);
 
 // Suppression de l'utilisateur actuellement connecté
-router.delete('/user/', usersController.deleteUser);
+router.delete('/user/', is_Auth, usersController.deleteUser);
 
 // Mise à jour d'une voiture
-router.put('/car/:userId', usersController.updateCar);
+router.put('/car/:userId', is_Auth, usersController.updateCar);
 
 module.exports = router;
 

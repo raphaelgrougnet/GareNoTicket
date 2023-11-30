@@ -46,7 +46,8 @@
 </template>
 
 <script>
-
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 export default {
     name: 'RegisterForm',
@@ -127,8 +128,14 @@ export default {
                         const json = await response.json();
                         if (!response.ok) {
                             this.errorMessage = json.message;
+                                toast.error("Une erreur est survenue durant l'inscription.", {
+                                timeout: 5000
+                            });
                             return;
                         }
+                        toast.success("Inscription effectué avec succès, veuillez vous connecter.", {
+                            timeout: 5000
+                        });
                         this.$router.push({ name : 'login'})
                     } catch (error) {
                         console.error(error);

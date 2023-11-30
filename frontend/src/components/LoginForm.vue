@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { useToast } from "vue-toastification";
+const toast = useToast();
 export default {
     name: 'LoginForm',
     data() {
@@ -66,9 +68,15 @@ export default {
               return;
             }
             localStorage.setItem('token', json.token)
+            toast.success("Connexion effectué avec succès.", {
+                timeout: 5000
+            });
             this.$router.push({ name : 'home'})
           } catch (error) {
             console.error(error);
+            toast.error("Une erreur est survenue.", {
+                timeout: 5000
+            });
           }
           
 
