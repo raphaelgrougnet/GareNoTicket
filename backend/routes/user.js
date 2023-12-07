@@ -4,13 +4,13 @@ const usersController = require('../controllers/usersController');
 const is_Auth = require('../middleware/is-auth');
 
 // /user/ => GET
-router.get('/users/', usersController.getUsers);
+router.get('/users/', is_Auth, usersController.getUsers);
 
 // L'utilisateur actuellement connecté /user/ (profil utilisateur)
 router.get('/user/', is_Auth, usersController.getUser);
 
 // un utilisateur avec son id /user/:id
-router.get('/user/:id', usersController.getUserById);
+router.get('/user/:id', is_Auth, usersController.getUserById);
 
 // Mise à jour d'un utilisateur
 router.put('/user/:userId', is_Auth, usersController.updateUser);

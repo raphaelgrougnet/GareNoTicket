@@ -66,8 +66,8 @@ const voitures = [
     "valet": "655380365f376fe7e3043243",
     "isParked": false,
     "isMoving": true,
-    "latitude": 1.5,
-    "longitude": 1.5,
+    "latitude": 46.79120520630646,
+    "longitude": -71.26620035746427,
     "timeToLeave": new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
   },
   {
@@ -79,8 +79,8 @@ const voitures = [
     "valet": "655380365f376fe7e3043243",
     "isParked": true,
     "isMoving": false,
-    "latitude": 1.5,
-    "longitude": 1.5,
+    "latitude": 46.79248381898516,
+    "longitude": -71.26271793974948,
     "timeToLeave": new Date(new Date().setHours(10,0,0,0)).toISOString()
   },
   {
@@ -92,8 +92,8 @@ const voitures = [
     "valet": "655380365f376fe7e3043244",
     "isParked": true,
     "isMoving": false,
-    "latitude": 1.8,
-    "longitude": 2,
+    "latitude": 46.79531799112927,
+    "longitude": -71.26199485419771,
     "timeToLeave": new Date(new Date().setHours(14,30,0,0)).toISOString()
   },
   {
@@ -105,8 +105,8 @@ const voitures = [
     "valet": "655380365f376fe7e3043245",
     "isParked": true,
     "isMoving": false,
-    "latitude": 2.2,
-    "longitude": 1.7,
+    "latitude": 46.79413967675395,
+    "longitude": -71.26024080795537,
     "timeToLeave": new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(9,0,0,0)).toISOString()
   },
   {
@@ -118,8 +118,8 @@ const voitures = [
     "valet": "655380365f376fe7e3043246",
     "isParked": false,
     "isMoving": false,
-    "latitude": 1.5,
-    "longitude": 2.5,
+    "latitude": 46.79272787799479,
+    "longitude": -71.2595007852538,
     "timeToLeave": new Date(new Date().setDate(new Date().getDate() + 2)).toISOString()
   }
 ];

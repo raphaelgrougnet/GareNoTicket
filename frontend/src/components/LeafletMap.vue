@@ -65,7 +65,7 @@ export default {
             this.pLongitude = longitude;
 
             this.map.setView([latitude, longitude], 13);
-            L.marker([latitude, longitude], { draggable: true, title: "currentPostion" }).addTo(this.map);
+            L.marker([latitude, longitude], { draggable: true, title: "Votre position" }).addTo(this.map);
           },
           (error) => {
             console.error("erreur:", error);
@@ -95,7 +95,7 @@ export default {
             this.map.removeLayer(layer);
           }
         });
-        L.marker([markerPosition.lat, markerPosition.lng], { draggable: false, title: "currentPosition" }).addTo(this.map);
+        L.marker([markerPosition.lat, markerPosition.lng], { draggable: false, title: "Votre Position" }).addTo(this.map);
         this.map.setView([markerPosition.lat, markerPosition.lng], 13);
         this.$emit('coord', { lat: markerPosition.lat, lng: markerPosition.lng });
         
@@ -127,7 +127,7 @@ export default {
         }
       });
       if (this.isParked) {
-        L.marker([this.latitude, this.longitude], { draggable: false, title: "currentPosition" }).addTo(this.map);
+        L.marker([this.latitude, this.longitude], { draggable: false, title: "Votre position" }).addTo(this.map);
         this.map.setView([this.latitude, this.longitude], 13);
       }
       else {

@@ -3,6 +3,6 @@ const dbController = require('../controllers/dbController');
 
 const router = express.Router();
 
-router.get('/db/seed' , dbController.seedDatabase);
+router.get('/db/seed', dbController.seedDatabase);
 
 module.exports = router;

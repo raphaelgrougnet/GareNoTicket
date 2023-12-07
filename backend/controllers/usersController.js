@@ -98,7 +98,8 @@ exports.updateUser = async (req, res, next) => {
 exports.updateCar = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    const user = await checkUserExists(userId);
+    const id = req.params.userId;
+    const user = await checkUserExists(id);
     const updatedCar = req.body;
     const car = user.voiture;
     if (!car) {
@@ -111,21 +112,37 @@ exports.updateCar = async (req, res, next) => {
       const day = date.getDay();
       const hour = date.getHours();
       const min = date.getMinutes();
-      if ((day >= 1 && day <= 5) && ((hour >= 9 && hour < 12) || (hour >= 13 && min >= 30 && hour < 17))) {
+      console.log(day, hour, min);
+      if ((day >= 1 && day <= 5) && ((hour >= 9 && hour < 12) || (hour >= 13 && min <= 30 && hour < 17))) {
+        console.log("Est en semaine et entre 9h et 12h ou entre 13h30 et 17h")
         car['timeToLeave'] = date.setMinutes(date.getMinutes() + 60);
-        if (car['timeToLeave'].hour >= 12 && car['timeToLeave'].hour < 13.5) {
+        if (car['timeToLeave'].hour >= 12 && (car['timeToLeave'].hour < 13 || car['timeToLeave'].hour >= 13 && car['timeToLeave'].min <= 30)) {
+          console.log("Le temps de départ est entre midi et 13h30 donc on le met à 14h30")
+          date.setHours(14);
+          date.setMinutes(30);
+          car['timeToLeave'] = date;
+        }
+        else if (hour >= 12 && (hour < 13 || hour == 13 && min <= 30)) {
+          console.log("Est en semaine mais dans les horaires de midi")
           date.setHours(14);
           date.setMinutes(30);
           car['timeToLeave'] = date;
         }
         else if (car['timeToLeave'].hour >= 17) {
+          console.log("Est en semaine mais après 17h")
           date.setdate(date.getDate() + 1);
-          date.setHours(9);
+          date.setHours(10);
           date.setMinutes(0);
+          if (date.getDay() == 6 || date.getDay() == 0) {
+            console.log("Est un samedi ou un dimanche")
+            const nextMonday = date.getDate() + (1 + 7 - date.getDay()) % 7;
+            date.setDate(nextMonday);
+          }
           car['timeToLeave'] = date;
         }
       }
       else {
+        console.log("Est un samedi ou un dimanche")
         const nextMonday = date.getDate() + (1 + 7 - date.getDay()) % 7;
         date.setDate(nextMonday);
         date.setHours(10);
@@ -145,8 +162,6 @@ exports.updateCar = async (req, res, next) => {
     next(err);
   }
 }
-
-
 
 exports.deleteUser = async (req, res, next) => {
   try {

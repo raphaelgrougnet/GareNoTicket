@@ -17,14 +17,59 @@ const router = createRouter({
         }
         else {
           const decoded = jwtDecode(localStorage.getItem('token'));
-          if (!decoded.voiture) {
+          if (!decoded.voiture && !decoded.isValet) {
             toast.error("Vous n'avez pas de voiture enregistrée. Veuillez en ajouter une.");
             next({ name: 'profil' })
+          }
+          else if (decoded.isValet) {
+            next({ name: 'valet' })
           }
           else {
             next()
           }
         }
+        
+        
+      }
+    },
+    {
+      path: '/valet',
+      name: 'valet',
+      component: () => import('../views/ValetView.vue'),
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('token') === null) {
+          next({ name: 'login' })
+        }
+        else{
+          if (!jwtDecode(localStorage.getItem('token')).isValet) {
+            next({ name: 'home' })
+          }
+          else{
+            next()
+          }
+        }
+        
+        
+      }
+    },
+    {
+      path: '/valet/deplacement/:id',
+      name: 'deplacement',
+      component: () => import('../views/DeplacementView.vue'),
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('token') === null) {
+          next({ name: 'login' })
+        }
+        else{
+          if (!jwtDecode(localStorage.getItem('token')).isValet) {
+            next({ name: 'home' })
+          }
+          else{
+            next()
+          }
+        }
+        
+        
       }
     },
     {
@@ -74,8 +119,8 @@ const router = createRouter({
     },
   ],
   
+  
 })
-
 
 
 export default router
