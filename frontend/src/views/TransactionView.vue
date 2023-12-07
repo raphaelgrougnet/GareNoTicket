@@ -49,7 +49,7 @@ export default {
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
                 
-                const response = await fetch(`http://localhost:3000/facture`, {
+                const response = await fetch(`https://gare-no-ticket.vercel.app/facture`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default {
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
                 
-                const response = await fetch(`http://localhost:3000/historique`, {
+                const response = await fetch(`https://gare-no-ticket.vercel.app/historique`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ export default {
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
                 
-                const response = await fetch(`http://localhost:3000/effectuerPaiement`, {
+                const response = await fetch(`https://gare-no-ticket.vercel.app/effectuerPaiement`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

@@ -88,7 +88,7 @@ export default {
                     toast.error("Veuillez vous connecter pour faire une action avec votre voiture.");
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
-                const response = await fetch(`http://localhost:3000/users`, {
+                const response = await fetch(`https://gare-no-ticket.vercel.app/users`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -128,7 +128,6 @@ export default {
         this.allUsers.forEach(user => {
             let date = new Date();
             let dateFin = new Date(user.voiture.timeToLeave);
-            console.log("🚀 ~ file: ValetView.vue:129 ~ mounted ~ dateFin:", dateFin)
             let jourActu = date.getDate();
             let heureActu = date.getHours();
             let minuteActu = date.getMinutes();

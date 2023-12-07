@@ -35,7 +35,7 @@ export default {
                     this.$router.push({ name: 'login' })
                     throw new Error('Non authentifié. Redirection vers la connexion.')
                 }
-                const response = await fetch(`http://localhost:3000/user`, {
+                const response = await fetch(`https://gare-no-ticket.vercel.app/user`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export default {
                     this.$router.push({ name: 'login' });
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
-                const response = await fetch(`http://localhost:3000/user/${userId}`, {
+                const response = await fetch(`https://gare-no-ticket.vercel.app/user/${userId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ export default {
                     this.$router.push({ name: 'login' });
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
-                const response = await fetch(`http://localhost:3000/user`, {
+                const response = await fetch(`https://gare-no-ticket.vercel.app/user`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
