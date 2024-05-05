@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Change directory
-        run: cd ./frontend
+        run: ls -l
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Node
