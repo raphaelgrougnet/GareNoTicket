@@ -28,10 +28,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Change directory
-        run: ls -l
       - name: Checkout
         uses: actions/checkout@v4
+        with: 
+          path: './frontend'
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
