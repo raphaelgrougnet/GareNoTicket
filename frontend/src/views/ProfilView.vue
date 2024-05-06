@@ -35,7 +35,7 @@ export default {
                     this.$router.push({ name: 'login' })
                     throw new Error('Non authentifié. Redirection vers la connexion.')
                 }
-                const response = await fetch(`https://gare-no-ticket.vercel.app/user`, {
+                const response = await fetch(`http://localhost:3000/user`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export default {
                     this.$router.push({ name: 'login' });
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
-                const response = await fetch(`https://gare-no-ticket.vercel.app/user/${userId}`, {
+                const response = await fetch(`http://localhost:3000/user/${userId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -93,7 +93,12 @@ export default {
                     }
                 }
                 else {
-                    toast.success('Modifications enregistrées avec succès');
+                  response.json().then((data) => {
+                    console.log(data)
+                    localStorage.setItem('token', data.updatedUserJWT)
+                  })
+
+                  toast.success('Modifications enregistrées avec succès');
                 }
             } catch (error) {
                 console.error(error);
@@ -107,7 +112,7 @@ export default {
                     this.$router.push({ name: 'login' });
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
-                const response = await fetch(`https://gare-no-ticket.vercel.app/user`, {
+                const response = await fetch(`http://localhost:3000/user`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

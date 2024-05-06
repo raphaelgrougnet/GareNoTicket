@@ -72,7 +72,7 @@ export default {
                     toast.error('Veuillez vous connecter pour faire une action avec votre voiture.')
                     throw new Error('Non authentifié. Redirection vers la connexion.')
                 }
-                const response = await fetch(`https://gare-no-ticket.vercel.app/user/${id}`, {
+                const response = await fetch(`http://localhost:3000/user/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export default {
                     toast.error('Veuillez vous connecter pour faire une action avec votre voiture.')
                     throw new Error('Non authentifié. Redirection vers la connexion.')
                 }
-                const response = await fetch(`https://gare-no-ticket.vercel.app/car/${id}`, {
+                const response = await fetch(`http://localhost:3000/car/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

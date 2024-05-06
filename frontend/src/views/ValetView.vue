@@ -88,7 +88,7 @@ export default {
                     toast.error("Veuillez vous connecter pour faire une action avec votre voiture.");
                     throw new Error('Non authentifié. Redirection vers la connexion.');
                 }
-                const response = await fetch(`https://gare-no-ticket.vercel.app/users`, {
+                const response = await fetch(`http://localhost:3000/users`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

@@ -114,7 +114,7 @@ export default {
         async register() {
             if (this.validateForm()) {
                     try {
-                        const response = await fetch('https://gare-no-ticket.vercel.app/auth/signup', {
+                        const response = await fetch(`http://localhost:3000/auth/signup`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'

@@ -89,7 +89,12 @@ exports.updateUser = async (req, res, next) => {
       await voiture.save();
     }
     await user.save();
-    res.status(200).json({ message: 'Utilisateur mis à jour.' });
+    const token = jwt.sign(
+        { email: user.email, isValet : user.isValet, price : user.price, voiture: user.voiture, userId: user._id },
+        process.env.SECRET_JWT,
+        { expiresIn: '24h' }
+    );
+    res.status(200).json({ updatedUserJWT: token });
   } catch (err) {
     next(err);
   }
